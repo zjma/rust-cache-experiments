@@ -1,8 +1,10 @@
 use std::cell::RefCell;
 use std::collections::HashMap;
-use std::fmt::{Debug, Display, Formatter};
+use std::fmt::{Display, Formatter};
 use std::hash::Hash;
 use std::rc::{Rc, Weak};
+use rand::Rng;
+
 
 struct Node<T> {
     content: T,
@@ -91,12 +93,12 @@ impl<T:Eq+Hash+Default+Clone> NaiveLruCache<T> {
 
 impl<T:Display> Display for NaiveLruCache<T> {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "[");
+        let _ = write!(f, "[");
         let mut cur_ptr = self.before_newest.borrow().next.clone().unwrap().upgrade().unwrap();
         while !Rc::ptr_eq(&cur_ptr,&self.after_oldest) {
             cur_ptr = {
                 let cur_node = cur_ptr.as_ref().borrow();
-                write!(f, "{},", cur_node.content);
+                let _ = write!(f, "{},", cur_node.content);
                 cur_node.next.clone().unwrap().upgrade().unwrap()
             };
         }
@@ -105,7 +107,7 @@ impl<T:Display> Display for NaiveLruCache<T> {
 }
 
 #[cfg(test)]
-mod test {
+mod my_test {
     use crate::mine::NaiveLruCache;
 
     #[test]
@@ -126,4 +128,17 @@ mod test {
         assert_eq!(true, cache.put(888));
         println!("{}", cache);
     }
+
 }
+
+// #[bench]
+// fn b1(b: &mut Bencher) {
+//     let mut cache:NaiveLruCache<i32> = NaiveLruCache::new(10);
+//     let mut rng = rand::thread_rng();
+//     let items = (0..1000).map(|x|rng.gen_range(0..10)).collect();
+//     b.iter(||{
+//         for item in items {
+//             cache.put(item);
+//         }
+//     });
+// }
