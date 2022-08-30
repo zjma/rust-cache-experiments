@@ -8,6 +8,7 @@ edition = "2021"
 [dependencies]
 concurrent_lru = "0.2.0"
 lru = "0.7.8"
+num_cpus = "1.13.1"
 rand = "0.8.5"
 rayon = "1.5.3"
 

@@ -130,15 +130,3 @@ mod my_test {
     }
 
 }
-
-// #[bench]
-// fn b1(b: &mut Bencher) {
-//     let mut cache:NaiveLruCache<i32> = NaiveLruCache::new(10);
-//     let mut rng = rand::thread_rng();
-//     let items = (0..1000).map(|x|rng.gen_range(0..10)).collect();
-//     b.iter(||{
-//         for item in items {
-//             cache.put(item);
-//         }
-//     });
-// }
